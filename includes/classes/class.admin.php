@@ -91,7 +91,7 @@ class Admin extends MysqlFns
 		}
 		else
 		{
-			$orderBy.="order by Name asc";
+			$orderBy.="order by `Order` asc";
 		}
 		$newRs_fname=$_POST['admin_fname'];
 		$newRs_name= $_POST['admin_text'];

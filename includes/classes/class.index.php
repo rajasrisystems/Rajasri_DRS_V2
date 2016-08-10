@@ -123,7 +123,7 @@ class Login extends MysqlFns
 		global $objSmarty,$config;
 		//Get the details from table for edit option
 		$datetemp = date("y/m/d");  
-		echo $tempdisvar= "SELECT * FROM rating r,resource re,code c 
+		$tempdisvar= "SELECT * FROM rating r,resource re,code c 
 				   WHERE r.ResourceID=re.ID and r.CodeID=c.ID 
 				   AND r.RatingID=' $id'";
 		$displaydet= $this->ExecuteQuery($tempdisvar, "select");

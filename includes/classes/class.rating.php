@@ -121,5 +121,19 @@ class Rating extends MysqlFns
 		$this->ExecuteQuery($tempdrop, "delete");
 		header("location:rating.php?successmsg=2");// redirecting
 	}
+	
+	function getAllResources(){
+		global $objSmarty;
+		$selectRes="select * from resource order by ResourceInitial asc";
+		$exeRes=$this->ExecuteQuery($selectRes, "select");
+		$objSmarty->assign("data", $exeRes);
+	}
+	
+	function getAllDepartment(){
+		global $objSmarty;
+		$seldept="select * from department order by DepartmentName asc";
+		$exedept=$this->ExecuteQuery($seldept,"select");
+		$objSmarty->assign("dept",$exedept);
+	}
 }
 ?>

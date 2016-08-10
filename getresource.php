@@ -9,8 +9,9 @@ if($_REQUEST['resource'] != '' &&  $_REQUEST['resource'] == '1')
 	$getmon = $_REQUEST['month'];
 	$monthName = date("F", mktime(0, 0, 0, $getmon, 10));
 	$getyr  = $_REQUEST['year'];
+	$getdepart = $_REQUEST['dept'];	
 	$date=$getmon.'/'.$getyr;
-	$select="select * from rating r,resource re where date_format(r.RatingDate, '%m/%Y')='".$date."' and re.ID=r.ResourceID group by r.ResourceID";
+	$select="select * from rating r,resource re where date_format(r.RatingDate, '%m/%Y')='".$date."' and re.ID=r.ResourceID and r.DepartmentID ='".$getdepart."' group by r.ResourceID";
 	$result=mysql_query($select);
 	$num=mysql_num_rows($result);
 	echo $num."@@@";

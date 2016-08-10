@@ -2,7 +2,13 @@
 	include 'includes/common.php';
 	include_once "includes/classes/class.resource.php";
 	$objResource = new Resource();
-	
+	$depvar = "SELECT * FROM department order by Id asc";
+	$depresult = mysql_query($depvar) OR die(mysql_error());
+	while($row = mysql_fetch_assoc($depresult))
+		{
+			$depdata[] = $row; // store in array	
+		}
+	$objSmarty->assign('depdata', $depdata);
 	if(isset($_REQUEST['hdAction']) && $_REQUEST['hdAction']!='')
 	{
 		$objResource -> ResourceAdding();

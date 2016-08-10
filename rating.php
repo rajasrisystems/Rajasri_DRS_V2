@@ -20,15 +20,12 @@
 	}
 	//objRating is in class.rating.php file
 	//to display the records in the page
+	$current_date=date('d/m/Y');
 	$objRating->display();
-	$disvar = "SELECT * FROM resource order by ResourceInitial asc";
-	$result = mysql_query($disvar) OR die(mysql_error());
-	while($row = mysql_fetch_assoc($result))
-		{
-			$data[] = $row; // store in array	
-		}
-	$objSmarty->assign('objRating', $objRating);	
-	$objSmarty->assign('data', $data);	
+	$objRating->getAllDepartment();
+	$objRating->getAllResources();
+	$objSmarty->assign('objRating', $objRating);
+	$objSmarty->assign('current_date', $current_date);	
 	$objSmarty->assign('IncludeTpl',"rating.tpl");
 	$objSmarty->display("pagetemplate.tpl");
 ?>

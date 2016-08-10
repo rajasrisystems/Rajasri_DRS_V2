@@ -3,6 +3,13 @@
 	include_once "includes/classes/class.index.php";
 	include_once "includes/classes/class.report.php";
 	$objLogin = new Login();
+	$depvar = "SELECT * FROM department order by Id asc";
+	$depresult = mysql_query($depvar) OR die(mysql_error());
+	while($rrow = mysql_fetch_assoc($depresult))
+		{
+			$depdata[] = $rrow; // store in array	
+		}
+	$objSmarty->assign('depdata', $depdata);
 	$months = array('01'=>"January", '02'=>"February", '03'=>"March", '04'=>"April", '05'=>"May", '06'=>"June", 
 		'07'=>"July", '08'=>"August", '09'=>"September", '10'=>"October", '11'=>"November", '12'=>"December");
 	$year = array('1'=>"2016", '2'=>"2017", '3'=>"2018", '4'=>"2019", '5'=>"2020", '6'=>"2021",

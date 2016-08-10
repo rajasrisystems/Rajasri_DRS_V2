@@ -11,8 +11,28 @@
 	
 	</script>
 <script>
+function getresdep(val){
+	$.ajax({
+		url: 'getdept.php',
+		type: "POST",
+		data:"departmentajax="+val,
+		success: function(data) {
+			if(data  != ""){
+					//alert(data);
+					document.getElementById("newresid").innerHTML=data;
+					return true;
+					}
+		}
+	});
+}
 function tbl_view()
 	{
+		if(document.getElementById('department').value =="")
+		{
+		alert('Please select department');
+		document.getElementById('department').focus();
+		return false;
+		}
 		if(document.getElementById('newresid').value=='')
 		{
 			alert('Please select initial');
@@ -46,18 +66,28 @@ function tbl_view()
 	}
 function tbl_report()
 	{
+		if(document.getElementById('department').value =="")
+		{
+		alert('Please select department');
+		document.getElementById('department').focus();
+		return false;
+		}
+		else
+		{
 			month=document.getElementById('month').value;
 			year=document.getElementById('year').value;
+			dept=document.getElementById('department').value;
 			document.getElementById('newresid').value='';
 			dataction=document.getElementById('dataction').value;
 			resource=1;
 			$.ajax({
 				url:'getresource.php',
 				type: "POST",
-			    	data: "month="+month+"&year="+year+"&resource="+resource,
+			    	data: "month="+month+"&year="+year+"&resource="+resource+"&dept="+dept,
 				success:function(data){
 					if(data  != ""){
-			        	data=data.split("@@@"); 
+			        	data=data.split("@@@");
+					//alert(data); 
 			        	$('#numrec').val(data[0]);
 			    		document.getElementById('mgrid').innerHTML=data[1];
 			        	return true;
@@ -65,18 +95,14 @@ function tbl_report()
 					}
 			    }
 			 });
-			$(document).ready(function() 
-			    { 
-			        $("#mgrid").tablesorter(); 
-			    } 
-			); 
+		$( "#radio2" ).prop( "checked", true );	
+		}
 		
-		$( "#radio" ).prop( "checked", true );
 	}	
-$(document).ready(function(){
+/*$(document).ready(function(){
 	tbl_report();
 	$( "#radio" ).prop( "checked", true );
-	/*if($('#radio').is(':checked'))
+	if($('#radio').is(':checked'))
 		{
 			alert('a');			
 			document.getElementsById("top")[0].setAttribute("download", "report.xls");
@@ -141,11 +167,11 @@ $(document).ready(function(){
 	newWindow=window.open(sa, 'Report.xls');
 	}
 	return (sa);
-	});*/
- });
+	});
+ });*/
 	
 function chkResource(){
-	if(document.getElementById("radio").checked==true){
+	if(document.getElementById("radio2").checked==true){
 		tbl_report();
 	}else{
 		tbl_view();
@@ -175,12 +201,15 @@ function tool(link) {
 	var op = mnth.options[mnth.selectedIndex];
 	//alert(op.text);
 	var month=op.text;
+	var dpt=document.getElementById('department'); 
+	var dp = dpt.options[dpt.selectedIndex];
+	var deptv=dp.text;
 	var year=document.getElementById('year').value;
 	var newresid=document.getElementById('newresid').value;	
     link.title = 'after click';
-    if($('#radio').is(':checked'))
+    if($('#radio2').is(':checked'))
 	{
-    link.download = 'Report-All-'+month+'-'+year+'.xls';
+    link.download = 'Report-All ('+deptv+')-'+month+'-'+year+'.xls';
 	}
     else
 	{
@@ -188,7 +217,7 @@ function tool(link) {
     	var opt = newresid.options[newresid.selectedIndex];
     	var option_value=opt.text;
     	//alert( opt.text );
-    link.download = 'Report-'+option_value+'-'+month+'-'+year+'.xls';
+    link.download = 'Report-'+option_value+'('+deptv+')-'+month+'-'+year+'.xls';
 	}
   }
 </script>
@@ -212,7 +241,7 @@ function tool(link) {
 				<tr>
 				<div class="Error" align="center" id="errmsg"></div>
 				 <td width="10%" nowrap="nowrap">Select Month & Year:</td>
-				 <td width="21%">
+				 <td width="17%" style="text-align:left;">
 					<select id="month" name="month" onchange="return chkResource();">
 					{foreach key=k item=v from=$months}	
 					<option value='{$k}' {if $k eq $currentMonth}selected{/if}>{$v} </option>
@@ -224,13 +253,26 @@ function tool(link) {
  					{/foreach}
 					</select>
 				 </td>
+				<td width="5%" nowrap="nowrap" style="text-align:left;">Department: <span style="color:red">*</span></td>
+				<td style="text-align:left;" width="5%"> 
+				<select id="department" name="department" style="width: 180px;" onchange="getresdep(this.value); tbl_report();">
+					<option value="">--Select--</option>
+					{foreach item=dept from=$depdata}
+					<p>
+					<option value='{$dept.Id}' {if $resourceDetails.0.DepartmentId eq $dept.Id} selected="selected" {/if}>
+						{$dept.DepartmentName}
+					</option>
+					</p>
+					{/foreach}	
+				</select>
+				</td>
 				<input type="hidden" name="dataction" id="dataction">
 				<input type="hidden" name="numrec" id="numrec">
 				<input type="hidden" name="singlerestemp" id="singlerestemp">
-				<td width="10%" nowrap="nowrap" style="text-align:right;">Resource:</td>
+				<td width="5%" nowrap="nowrap" style="text-align:left;">Resource:</td>
 				<td width="5%">
-				<input type ="radio" id="radio" name = "radio" onclick="return tbl_report();"> 
-	               		<span style="text-align:right" width="6%"valign="top">All</span>
+				<input type ="radio" id="radio2" name = "radio" onclick="return tbl_report();"> 
+	               		<span style="text-align:left" width="6%"valign="top">All</span>
 	            		</td>
               			<td width="21%">
 				<input type ="radio" id="radio1" name = "radio"  onclick="return tbl_view();"> 
@@ -260,6 +302,14 @@ function tool(link) {
 	<br/>
 		<input type="hidden" name="sortflag" id="sortflag" value="{$smarty.request.sortflag}">
 		<div class="report_view" id="mgrid" >
+			<table id="exporttable" border="0" cellpadding="2" cellspacing="0" class="grid-table">
+			<tr>
+				<th>Resource</th>
+				<th>Beginning Rate</th>
+				<th>End Rate</th>
+			</tr> 
+			 <tr><td colspan="5">No records found</td></tr>
+			</table>
 		</div>
  </div>
 </div>

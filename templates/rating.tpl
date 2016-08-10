@@ -11,8 +11,12 @@
 		$( "#ratingdate" ).datepicker({
 			dateFormat:"dd/mm/yy",
 			 maxDate: 0
-				}).datepicker("setDate", new Date());});
-	jQuery(document).ready(function($){
+				})
+				//.datepicker("setDate", new Date());
+		});
+		jQuery(document).ready(function($)
+		
+	{
 		$("#code").autocomplete({
 			source: function(request, response) {
 				$.ajax({
@@ -26,12 +30,14 @@
 				});
 		    },scroll:true,
 			minLength: 0
-		}).focus(function(){            
+			
+		}).bind('focus', function(){ $(this).autocomplete("search"); } );           
             // The following works only once.
             // $(this).trigger('keydown.autocomplete');
             // As suggested by digitalPBK, works multiple times
-            $(this).data("autocomplete").search($(this).val());
-        });
+			//$( ".selector" ).on( "autocompletefocus", function( event, ui ) {} );
+            //$(this).data("autocomplete").search($(this).val());
+        //});
 		/*$("#code").on('change mouseover focusIn', function(){
 			var val=this.value;
 			valArr=val.split('-');
@@ -41,6 +47,26 @@
 			}
 		});*/
 	});
+	
+
+			
+
+function getresdep(val){
+	$.ajax({
+		url: 'getdept.php',
+		type: "POST", 
+		data:"departmentajax="+val,
+		success: function(data) {
+			if(data  != ""){
+					//alert(data);
+					document.getElementById("newresid").innerHTML=data;
+					return true;
+					}
+		}
+	});
+}
+	
+	
 	function validfield()
 	{
 		if(document.getElementById('ratingdate').value=='')
@@ -49,10 +75,21 @@
 		document.getElementById('ratingdate').focus();
 		return false;
 		}
-		if(document.getElementById('resource').value=='')
+		
+		if(document.getElementById('department').value=='')
 		{
-		document.getElementById('errmsg').innerHTML='Please select resource';
-		document.getElementById('resource').focus();
+		alert("Please select department");
+		//document.getElementById('errmsg').innerHTML='Please select resource';
+		//document.getElementById('resource').focus();
+		return false;
+		}
+		
+		if(document.getElementById('newresid').value=='')
+		{
+		
+		alert("Please select resource");
+		//document.getElementById('errmsg').innerHTML='Please select resource';
+		//document.getElementById('resource').focus();
 		return false;
 		}
 		if(document.getElementById('code').value=='')
@@ -186,9 +223,9 @@
 			<input type="hidden" name="RatId" id="RatId" value="{$smarty.request.Rat_Id}">
 			<input type="hidden" name="update_rating" id="update_rating" >
 			<table border="0" cellpadding="0" cellspacing="0" class="grid-table">
-				<th colspan="8" style="text-align:left">Rating</th>
+				<th colspan="10" style="text-align:left">Rating</th>
 				<tr> 
-				<td style="border-bottom:none;" colspan="8"> <div class="Error" align="center" id="errmsg"></div>
+				<td style="border-bottom:none;" colspan="10"> <div class="Error" align="center" id="errmsg"></div>
 					<div class="success">{if $smarty.request.successmsg eq 3} User data added successfully {/if}
 					</div>
 					<div class="success">{if $smarty.request.successmsg eq 1} User data updated successfully {/if}
@@ -198,29 +235,44 @@
 				</td>
 				</tr>
 				<tr style="border-bottom:none;">
-					<td style="text-align:right;border-bottom:none;" width="10%" valign="top" nowrap="nowrap">Rating Date:</td>
-					<td style="text-align:left;border-bottom:none;" width="10%"valign="top">
-						<input type="text" name="ratingdate" id="ratingdate" size="12" readonly="readonly" value="{$getRating.0.RatingDate|date_format:'%d/%m/%Y'}">
+					<td style="text-align:right;border-bottom:none;" width="5%" valign="top" nowrap="nowrap">Rating Date: <span style="color:red;">*</span></td>
+					<td style="text-align:left;border-bottom:none;" width="5%" valign="top">
+						<input type="text" name="ratingdate" style="width:80px;" id="ratingdate" size="12" readonly="readonly" 
+						value="{if $getRating.0.RatingDate neq ''}{$getRating.0.RatingDate|date_format:'%d/%m/%Y'}{else}{$current_date}{/if}">
 					</td>
-					<td style="text-align:right;border-bottom:none;" width="10%"valign="top">Resource:</td>
-					<td style="text-align:left;border-bottom:none;" width="5%"valign="top"> 
-					<select id="resource" name="resource" style="width: 120px;">
+					
+					<!-- Department Field -->
+					
+					<td style="text-align:right;border-bottom:none;" width="9%"valign="top">Department: <span style="color:red;">*</span>  </td>
+					<td style="text-align:left;border-bottom:none;" id="deptshow" width="5%"valign="top">
+					<select id="department" name="department" style="width:165px;" onchange="getresdep(this.value);">
 						<option value="">--Select--</option>
+							{foreach item=department from=$dept}
+								<option value='{$department.Id}' {if $getRating.0.DepartmentId eq $department.Id} selected="selected" {/if}>{$department.DepartmentName}</option>
+							{/foreach}
+					</select>
+					</td>
+					<!-- Resource Field -->
+					
+					<td style="text-align:right;border-bottom:none;" width="8%"valign="top">Resource: <span style="color:red">*</span></td>
+					<td id="deptshow" style="text-align:left;border-bottom:none;" width="5%"valign="top"> 
+					<select id="newresid" name="newresid" style="width: 95px;" >
+						<option value="">--Resource--</option>
 						{foreach item=resource from=$data}<p><option value='{$resource.ID}' 
-			{if $getRating.0.ResourceID eq $resource.ID} selected="selected" {/if}>{$resource.ResourceInitial}</option></p>
+						{if $getRating.0.ResourceID eq $resource.ID} selected="selected" {/if}>{$resource.ResourceInitial}</option></p>
 						{/foreach}	
 					</select>
 					</td>
-					<td style="text-align:right;border-bottom:none;" width="10%"valign="top">Code:</td>
-					<td style="text-align:left;border-bottom:none;" width="10%"valign="top">
-						<input type="text" id="code" name="code" style="width: 250px;" value="{$getRating.0.Code}">
+					<td style="text-align:right;border-bottom:none;" width="6%"valign="top">Code: <span style="color:red">*</span></td>
+					<td style="text-align:left;border-bottom:none;" width="5%"valign="top">
+						<input type="text" id="code" style="text-align:left;" name="code" style="width:200px;" value="{$getRating.0.Code}">
 	                        	</td>
-					<td style="text-align:right;border-bottom:none; vertical-align:top">Notes:</td>
+					<td style="text-align:left;border-bottom:none; vertical-align:top">Notes:</td>
 					<td style="text-align:left;border-bottom:none;">
-						<textarea rows="3" cols="40" id="notes" name="notes">{if $getRating.0.Notes neq '-'}{$getRating.0.Notes}{else} {/if}</textarea>
+						<textarea rows="3" cols="25" id="notes" name="notes">{if $getRating.0.Notes neq '-'}{$getRating.0.Notes}{else} {/if}</textarea>
 					</td>
 					<tr style="border-bottom:none;">
-					<td colspan="8"> 		
+					<td colspan="10"> 		
 	 					<input type=submit name="submit1" value="Submit"> 
 					</td></tr>
 				</tr>

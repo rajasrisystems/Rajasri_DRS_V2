@@ -26,6 +26,24 @@
 		{
 			$data[] = $row; // store in array	
 		}
+	if(isset($_GET["func"]) && $_GET["func"] === "myFunction") 
+	{
+	  	$email = new PHPMailer();
+		$senderid = $_REQUEST['newresid'];
+		
+		$mailvar = "SELECT Email FROM `resource` WHERE ID = '$senderid' ";
+		$depresult = mysql_query($mailvar) OR die(mysql_error());
+		//print_r($_REQUEST);
+		$email->From      = 'you@example.com';
+		$email->FromName  = 'Your Name';
+		$email->Subject   = 'Message Subject';
+		$email->Body      = $bodytext;
+		$email->AddAddress( 'destinationaddress@example.com' );
+		$file_to_attach = 'PATH_OF_YOUR_FILE_HERE';
+		$email->AddAttachment( $file_to_attach , 'NameOfFile.pdf' );
+		return $email->Send();
+
+	}
 	$objSmarty->assign('tabresdata', $data);	
 	$objSmarty->assign('activePage',"3");
 	$objSmarty->assign('IncludeTpl',"report.tpl");

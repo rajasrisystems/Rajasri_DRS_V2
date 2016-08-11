@@ -4,7 +4,7 @@
 	exit;
 	$query = 'SELECT Code as cd, 
 			 Description as ds FROM code where Code like "%'.mysql_real_escape_string($_REQUEST['term']).'%" OR 
-			 Description like "%'.mysql_real_escape_string($_REQUEST['term']).'%" ORDER BY Code ASC';
+			 Description like "%'.mysql_real_escape_string($_REQUEST['term']).'%" ORDER BY ID ASC';
 	$rs = mysql_query($query); 
 	
 	// "%'.mysql_real_escape_string($_REQUEST['term']).'%" ---> If the '%' is in the starting point it doesnt care about starting or before '%'. 

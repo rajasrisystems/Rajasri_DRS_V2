@@ -10,6 +10,8 @@
 	{
 		$objLogin->MakeLoginusers();
 	}
+	
+	
 	$objSmarty->assign('IncludeTpl',"index.tpl");
 	$objSmarty->display("index.tpl");
 ?>

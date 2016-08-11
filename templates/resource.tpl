@@ -165,6 +165,9 @@ function ressortsub3()
 					{/foreach}	
 				</select>
 				</td>
+				
+				
+				
 				<!---- email ---->
 				<td style="text-align: right;border-bottom:none; width: 4%;" nowrap="nowrap">Email : <span style="color:red">*</span></td>
 				<td width="5%" style="border-bottom:none;"><input type ="text" style="width: 170px;" id="em_txt" name = "em_txt" value="{$resourceDetails.0.Email}"></td>

@@ -66,7 +66,7 @@ function loginSubmit()
 							<td class="last"><input type="password" class="textbox" name="password" id="password" /></td>
 						</tr>
 						<tr>
-						<!--  	<td align="left"><a href="#" class="forgot">Forgot Password?</a>&nbsp;</td>-->
+						 	<td align="left"><a href="forgotpassword.php" class="forgot">Forgot Password?</a>&nbsp;</td>
 						</tr>
 						<tr class="bg">
 							<td align="right"><input type="submit" class="btn-submit" value="LOGIN" name="submit"/></td>

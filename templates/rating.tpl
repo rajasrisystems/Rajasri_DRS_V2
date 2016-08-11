@@ -245,7 +245,7 @@ function getresdep(val){
 					
 					<td style="text-align:right;border-bottom:none;" width="9%"valign="top">Department: <span style="color:red;">*</span>  </td>
 					<td style="text-align:left;border-bottom:none;" id="deptshow" width="5%"valign="top">
-					<select id="department" name="department" style="width:165px;" onchange="getresdep(this.value);">
+					<select id="department" name="department" style="width:130px;" onchange="getresdep(this.value);">
 						<option value="">--Select--</option>
 							{foreach item=department from=$dept}
 								<option value='{$department.Id}' {if $getRating.0.DepartmentId eq $department.Id} selected="selected" {/if}>{$department.DepartmentName}</option>
@@ -264,8 +264,8 @@ function getresdep(val){
 					</select>
 					</td>
 					<td style="text-align:right;border-bottom:none;" width="6%"valign="top">Code: <span style="color:red">*</span></td>
-					<td style="text-align:left;border-bottom:none;" width="5%"valign="top">
-						<input type="text" id="code" style="text-align:left;" name="code" style="width:200px;" value="{$getRating.0.Code}">
+					<td style="text-align:left;border-bottom:none;" width="15%"valign="top">
+						<input type="text" id="code" style="text-align:left;" name="code" style="width:183px;" value="{$getRating.0.Code}">
 	                        	</td>
 					<td style="text-align:left;border-bottom:none; vertical-align:top">Notes:</td>
 					<td style="text-align:left;border-bottom:none;">

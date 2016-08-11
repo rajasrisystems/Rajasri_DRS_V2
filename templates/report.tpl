@@ -1,16 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 {literal}
-	<script src="js/jquery-1.12.4.js"></script>
-  	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-	<link rel="stylesheet" href="css/jquery-ui.css">
-  	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="js/excellentexport.js">
-				
-	
-	</script>
+<script src="js/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="css/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="js/excellentexport.js"></script>
 <script>
+function sendMail() 
+{
+	var service_id = 'my_mandrill';
+	var template_id = 'feedback';
+	var template_params = {
+		name: 'John',
+		reply_email: 'monicap@rajasri.net',
+		message: 'This is awesome!'
+	};
+	emailjs.send(service_id,template_id,template_params);
+}
 function getresdep(val){
 	$.ajax({
 		url: 'getdept.php',
@@ -61,7 +69,8 @@ function tbl_view()
 			    }
 			    	    
 			 });
-		$( "#radio1" ).prop( "checked", true );
+		$( "#radio1" ).prop( "checked", true ); /*individual*/
+    		document.getElementById("sendmail").style.display = "block";
 		}
 	}
 function tbl_report()
@@ -99,6 +108,63 @@ function tbl_report()
 		}
 		
 	}	
+
+function chkResource(){
+	if(document.getElementById("radio2").checked==true){
+		tbl_report();
+	}else{
+		tbl_view();
+	}
+}
+function sortsub1()
+	{
+	if((document.getElementById('sortflag').value!="1")&&(document.getElementById('sortflag').value!="2"))
+	{
+		flag=2;
+	}else if(document.getElementById('sortflag').value=="1")
+	{
+		flag=2;
+	}
+	else if(document.getElementById('sortflag').value=="2")
+	{
+		flag=1;
+	}	
+	FormName = document.admin_form;
+	FormName.sortflag.value=flag;
+	FormName.submit();
+	}
+
+function tool(link) 
+ {
+	
+ 	var mnth = document.getElementById('month');
+	var op = mnth.options[mnth.selectedIndex];
+	//alert(op.text);
+	var month=op.text;
+	var dpt=document.getElementById('department'); 
+	var dp = dpt.options[dpt.selectedIndex];
+	var deptv=dp.text;
+	var year=document.getElementById('year').value;
+	var newresid=document.getElementById('newresid').value;	
+    	link.title = 'after click';
+    	if($('#radio2').is(':checked'))
+	{
+    		link.download = 'Report-All ('+deptv+')-'+month+'-'+year+'.xls';
+	}
+    	else
+	{
+    		var newresid = document.getElementById('newresid');
+    		var opt = newresid.options[newresid.selectedIndex];
+    		var option_value=opt.text;
+   		link.download = 'Report-'+option_value+'('+deptv+')-'+month+'-'+year+'.xls';
+	}
+  }
+
+function goExport(){
+	var str = $("form").serialize();
+	window.location="excel.php?"+str;
+	
+}
 /*$(document).ready(function(){
 	tbl_report();
 	$( "#radio" ).prop( "checked", true );
@@ -170,56 +236,6 @@ function tbl_report()
 	});
  });*/
 	
-function chkResource(){
-	if(document.getElementById("radio2").checked==true){
-		tbl_report();
-	}else{
-		tbl_view();
-	}
-}
-function sortsub1()
-	{
-	if((document.getElementById('sortflag').value!="1")&&(document.getElementById('sortflag').value!="2"))
-	{
-		flag=2;
-	}else if(document.getElementById('sortflag').value=="1")
-	{
-		flag=2;
-	}
-	else if(document.getElementById('sortflag').value=="2")
-	{
-		flag=1;
-	}	
-	FormName = document.admin_form;
-	FormName.sortflag.value=flag;
-	FormName.submit();
-	}
-
-function tool(link) {
-	
- 	var mnth = document.getElementById('month');
-	var op = mnth.options[mnth.selectedIndex];
-	//alert(op.text);
-	var month=op.text;
-	var dpt=document.getElementById('department'); 
-	var dp = dpt.options[dpt.selectedIndex];
-	var deptv=dp.text;
-	var year=document.getElementById('year').value;
-	var newresid=document.getElementById('newresid').value;	
-    link.title = 'after click';
-    if($('#radio2').is(':checked'))
-	{
-    link.download = 'Report-All ('+deptv+')-'+month+'-'+year+'.xls';
-	}
-    else
-	{
-    	var newresid = document.getElementById('newresid');
-    	var opt = newresid.options[newresid.selectedIndex];
-    	var option_value=opt.text;
-    	//alert( opt.text );
-    link.download = 'Report-'+option_value+'('+deptv+')-'+month+'-'+year+'.xls';
-	}
-  }
 </script>
 {/literal}
 <!--Design Prepared by Rajasri Systems-->   
@@ -241,7 +257,7 @@ function tool(link) {
 				<tr>
 				<div class="Error" align="center" id="errmsg"></div>
 				 <td width="10%" nowrap="nowrap">Select Month & Year:</td>
-				 <td width="17%" style="text-align:left;">
+				 <td width="18%" style="text-align:left;">
 					<select id="month" name="month" onchange="return chkResource();">
 					{foreach key=k item=v from=$months}	
 					<option value='{$k}' {if $k eq $currentMonth}selected{/if}>{$v} </option>
@@ -255,7 +271,7 @@ function tool(link) {
 				 </td>
 				<td width="5%" nowrap="nowrap" style="text-align:left;">Department: <span style="color:red">*</span></td>
 				<td style="text-align:left;" width="5%"> 
-				<select id="department" name="department" style="width: 180px;" onchange="getresdep(this.value); tbl_report();">
+				<select id="department" name="department" style="width: 160px;" onchange="getresdep(this.value); tbl_report();">
 					<option value="">--Select--</option>
 					{foreach item=dept from=$depdata}
 					<p>
@@ -274,10 +290,10 @@ function tool(link) {
 				<input type ="radio" id="radio2" name = "radio" onclick="return tbl_report();"> 
 	               		<span style="text-align:left" width="6%"valign="top">All</span>
 	            		</td>
-              			<td width="21%">
+              			<td width="18%" style="text-align:left">
 				<input type ="radio" id="radio1" name = "radio"  onclick="return tbl_view();"> 
 	             		<span style="text-align:left;" width="10%" valign="top" nowrap="nowrap" >Individual</span>
-	          		<select id="newresid" name="newresid" style="width: 120px;" onchange="return tbl_view();">
+	          		<select id="newresid" name="newresid" style="width: 96px;" onchange="return tbl_view();">
 						<option value="">--Resource--</option>
 						{foreach item=resource from=$tabresdata}
 						<option value='{$resource.ID}'>{$resource.ResourceInitial}</option>
@@ -290,8 +306,15 @@ function tool(link) {
 	                	<input type="hidden" id="reportType" name="reportType" value="Transactions">
 				 <button id="exportBtn" download="Report.xls" class="btn btn-lg btn-warning custom-btn-01 hover_effect pull-right pull-right-to-left">Export to CSV</button>
 				</td> -->
-				<td style="text-align:right;">
-			<a class="button" id="top" href="#"  onclick="tool(this); return ExcellentExport.excel(this,'exporttable'); "><img src="img/CSV.png" align="middle" height="42" width="42">Export to CSV</a>
+				
+				<td style="text-align:left; display:none;" id="sendmail" name="sendmail">
+				<a  class="button" id="top"  onclick="sendMail();" href="#"><img src="img/mail_send.png" align="middle" height="30" width="30">Send mail</a>
+				</td>
+				
+				<td style="text-align:right;" >
+				<a style="float:right;" href="#" onclick="goExport();">Export</a>
+				<input type="hidden" name="resourceq" id="resourceq" value=" ">
+<a class="button" id="top" href="#" onclick="tool(this); return ExcellentExport.excel(this,'exporttable'); "><img src="img/CSV.png" align="middle" height="30" width="30">Export to CSV</a>
 				</td>
 	         		</tr>
 	         		</tr>

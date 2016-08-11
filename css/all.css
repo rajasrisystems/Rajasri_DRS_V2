@@ -96,7 +96,7 @@ body {
 	padding:10px;
 	font-weight:bold;
 	font-size:12px;
-	text-transform:uppercase;
+	text-transform:capitalize;
 	cursor:pointer;
 }
 #login-footer{
@@ -274,7 +274,7 @@ textarea
 }
 	
  .ui-autocomplete {
- max-width:254px;
+ max-width:230px;
             max-height: 150px;
             overflow-y: auto;
             /* prevent horizontal scrollbar */

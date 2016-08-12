@@ -135,7 +135,7 @@ class Login extends MysqlFns
 		//$uprdate = $_REQUEST['ratingdate'];
 		$rat_date=explode("/", $_REQUEST['ratingdate']);
 		$uprdate=$rat_date[2]."-".$rat_date[1]."-".$rat_date[0];
-		$upresid = $_REQUEST['resource'];
+		$upresid = $_REQUEST['newresid'];
 		$upnotes=$_REQUEST['notes'];	
 		$upcodeid= $_REQUEST['code'];	
 		// update details into Rating Table

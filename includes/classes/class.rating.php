@@ -6,11 +6,13 @@ class Rating extends MysqlFns
 		global $objSmarty,$config;
 		$rat_date=explode("/", $_REQUEST['ratingdate']);
 		$newdate=$rat_date[2]."-".$rat_date[1]."-".$rat_date[0];
-		$newResourceid = $_REQUEST['resource'];
+		$newResourceid = $_REQUEST['newresid'];
 		$newnotes=$_REQUEST['notes'];	
 		$enterCode= $_REQUEST['code'];
+		$deptidnew = $_REQUEST['department'];
 		// Checking for duplicate records in rating table
 		$checkvar = "SELECT * FROM rating WHERE RatingDate = '$newdate' AND ResourceID = '$newResourceid' AND CodeID = (SELECT ID FROM code WHERE Code='$enterCode') ";
+			
 		$execvar = mysql_query($checkvar);
 		if (mysql_num_rows($execvar) > 0) 
 		{
@@ -23,9 +25,11 @@ class Rating extends MysqlFns
 					 ResourceID,
 					 CodeID,
 					 Notes,
+					DepartmentID, 	
 					 CreatedBy) 
 				         VALUES 
-				      	 ('$newdate','$newResourceid',(SELECT ID FROM code WHERE Code='$enterCode'),'$newnotes','".$_SESSION['UserId']."')"; 
+				      	 ('$newdate','$newResourceid',(SELECT ID FROM code WHERE Code='$enterCode'),'$newnotes','$deptidnew','".$_SESSION['UserId']."')"; 
+		
 		$this->ExecuteQuery($a, "insert");
 		header("location:rating.php?successmsg=3");// redirecting
 		}
@@ -85,20 +89,22 @@ class Rating extends MysqlFns
 		$ddisplaydet= $this->ExecuteQuery($dtempdisvar, "select");
 		return $ddisplaydet[0]['Username'];
 	}
-	function Update_rating($id)
+	/*function Update_rating($id)
 	{
 		global $objSmarty,$config;
 		//$uprdate = $_REQUEST['ratingdate'];
 		$rat_date=explode("/", $_REQUEST['ratingdate']);
 		$uprdate=$rat_date[2]."-".$rat_date[1]."-".$rat_date[0];
-		$upresid = $_REQUEST['resource'];
+		$upresid = $_REQUEST['newresid'];
 		$upnotes=$_REQUEST['notes'];	
 		$upcodeid= $_REQUEST['code'];	
+		$updeptid= $_REQUEST['department'];
 		// update details into Rating Table
-		$tempvar = " UPDATE rating SET RatingDate= '$uprdate ',
-					 ResourceID = '$upresid',
+		echo $tempvar = " UPDATE rating SET RatingDate= '$uprdate ',
+					 ResourceID = '$upresid', DepartmentID = '$updeptid',
 					 CodeID =(SELECT ID FROM code WHERE Code='$upcodeid'),
-					 Notes='$upnotes' WHERE RatingID ='$id'";
+					 Notes='$upnotes' WHERE RatingID ='$id'"; 
+	
 		$this->ExecuteQuery($tempvar, "update");
 		header("location:rating.php?successmsg=1");// redirecting
 	}	
@@ -112,7 +118,7 @@ class Rating extends MysqlFns
 				   AND r.RatingID=' $id'";
 		$displaydet= $this->ExecuteQuery($tempdisvar, "select");
 		$objSmarty->assign('getRating', $displaydet);
-	}
+	}*/
 	function deleterow($id)
 	{
 		global $objSmarty,$config;

@@ -186,6 +186,59 @@ class Report extends MysqlFns
 		}
 	}
 	return $average=round((array_sum($pointsArr))/$noofdays,2);
-	}		
+	}
+	function getmailid($id, $nid)
+	{
+		//$selectedid = $_REQUEST['newresid'];
+		$iselect="select Email from resource where ID='".$id."'";
+		$idresource = $this->ExecuteQuery($iselect,"select");
+		$to_email = $idresource[0]['Email'];
+		$filepath =  $_SERVER['DOCUMENT_ROOT']."/rajasri_DRS/$nid"; 
+		$mailmonth = $_REQUEST['month'];
+		$monthName = date("F", mktime(0, 0, 0, $getmon, 10));
+		$mailyear = $_REQUEST['year'];
+		$iniquery=$_REQUEST['optionname'];
+		$mail_sendlink=$this->sendmail($monthName,$mailyear,$to_email,$filepath,$iniquery);
+	}
+	function sendmail($mailmon,$mailyr,$to_email,$file,$iniquery)
+    	{
+		if($to_email!="")
+           	 {
+                $Recipiant = $to_email;
+               // $subject = "Daily status report for a Period : ".$mailmon."-".$mailyr.".";
+                $subject="Rajasri Daily Status Report";
+                $Sender="hr@rajasri.net";
+                $host= $config['Email_Host'];                               // sets GMAIL as the SMTP server
+                $port=$config['Email_Port'];                                                   // set the SMTP port for the GMAIL server
+                $username=$config['Email_Username'];                   // GMAIL username
+                $pwd=$config['Email_Password'];
+
+                include $_SERVER['DOCUMENT_ROOT'].'/rajasri_DRS/phpmailer/class.phpmailer.php';
+                $mail = new PHPMailer();
+                $mail->IsSMTP();
+                $mail->IsMail();
+                $mail->SMTPAuth   = true;                  // enable SMTP authentication
+                $mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
+                $mail->Host       = $host;      // sets GMAIL as the SMTP server
+                $mail->Port       = $port;                   // set the SMTP port for the GMAIL server
+                $mail->Username   = $username;  // GMAIL username
+                $mail->Password   = $pwd;            // GMAIL password
+                $mail->AddReplyTo($Sender,"");
+                $mail->From       = "hr@rajasri.net";
+                $mail->FromName   = "Rajasri";
+                $mail->Sender      = $Sender;
+                $mail->Subject    = $subject;
+                if($file!="")
+		{
+                   $mail->AddAttachment($file); // attach files
+                }
+		$mail->Body       = "Hai ".$iniquery." Please find the attachment for your daily status report for a Period : ".$mailmon."-".$mailyr.".";
+                $mail->AddAddress("$Recipiant","");
+                if($mail->Send()) 
+		{return true;}else{return false;}
+                $mail->ClearAddresses();
+           	 }
+	header("location:report.php?id= 1");	
+	}
 }
 ?>

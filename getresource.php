@@ -186,22 +186,21 @@ if($_REQUEST['resource'] != '' &&  $_REQUEST['resource'] == '2')
 			}
 			else
 			{
-				$begin_points=50;
+				$begin_points=$config['DefaultPoint'];
 			}
 			/******************************** For Previous Month**************************************/
 			$change=0;
 			if($count_res > 0){
-			$mulvar="select * from rating where ResourceID='".$getini."' and RatingDate='".$date."' order by RatingDate desc";
-			$mulquery=mysql_query($mulvar);
-			$num_rows=mysql_num_rows($mulquery);
-			while($mulrow=mysql_fetch_array($mulquery)){
+				$mulvar="select * from rating where ResourceID='".$getini."' and RatingDate='".$date."' order by RatingDate desc";
+				$mulquery=mysql_query($mulvar);
+				$num_rows=mysql_num_rows($mulquery);
+				while($mulrow=mysql_fetch_array($mulquery)){
 					$mulcode=$mulrow['CodeID'];
 					$mulselect="select * from code where ID='".$mulcode."'";
 				$multiple=$objReport->ExecuteQuery($mulselect, "select");
 				$change +=$multiple[0]['Points'];
-				$newPoint= $begin_points +$change;
 				}
-			
+				$newPoint= $begin_points +$change;
 				$newcodevar[]=$exe_res[0]['CodeID'];
 				/* $codeId=$exe_res[0]['CodeID'];
 				$selectChange="select * from code where ID='".$codeId."'";

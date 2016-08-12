@@ -105,7 +105,7 @@ function getresdep(val){
 		}
 		else
 		{
-			document.getElementById('update_rating').value=1;	
+			document.getElementById('update_rating').value='1';	
 		}	
 	}
 	function myFunction() 
@@ -221,7 +221,7 @@ function getresdep(val){
 		<form name="rating_form" id="rating_form" method="post" onsubmit="return validfield(this);">
 			<input type="hidden" name="Hitaction" id="Hitaction">
 			<input type="hidden" name="RatId" id="RatId" value="{$smarty.request.Rat_Id}">
-			<input type="hidden" name="update_rating" id="update_rating" >
+			<input type="hidden" name="update_rating" id="update_rating" value="" >
 			<table border="0" cellpadding="0" cellspacing="0" class="grid-table">
 				<th colspan="10" style="text-align:left">Rating</th>
 				<tr> 

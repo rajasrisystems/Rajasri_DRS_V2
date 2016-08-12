@@ -148,7 +148,7 @@ function sortsub3()
 				</tr>
 			<tr>
 				
-				<td nowrap="nowrap" style="text-align:right;border-bottom:none;">Name: <span style="color:red">*</span></td>
+				<td nowrap="nowrap" style="text-align:left;border-bottom:none;width:5%;">Name: <span style="color:red">*</span></td>
 				<td width="5%" style="border-bottom:none;"><input type ="text"  style="width: 130px;" id="ad_fname" name = "admin_fname" value="{$adminDetails.0.Name}"></td>
 				
 				<td style="text-align: right;border-bottom:none; width: 4%;" nowrap="nowrap">Designation:</td>

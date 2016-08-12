@@ -70,7 +70,7 @@ function tbl_view()
 			    	    
 			 });
 		$( "#radio1" ).prop( "checked", true ); /*individual*/
-    		document.getElementById("sendmail").style.display = "block";
+    		document.getElementById("sendmail").style.display = "none";
 		}
 	}
 function tbl_report()
@@ -159,11 +159,18 @@ function tool(link)
    		link.download = 'Report-'+option_value+'('+deptv+')-'+month+'-'+year+'.xls';
 	}
   }
-
 function goExport(){
+	
+	var dpt=document.getElementById('department'); 
+	var dp = dpt.options[dpt.selectedIndex];
+	var deptv=dp.text;
+	var idpt=document.getElementById('newresid'); 
+	var idp = idpt.options[idpt.selectedIndex];
+	var optione=idp.text;
+	document.getElementById('optionname').value=optione;
+	document.getElementById('deptname').value=deptv;
 	var str = $("form").serialize();
 	window.location="excel.php?"+str;
-	
 }
 /*$(document).ready(function(){
 	tbl_report();
@@ -255,9 +262,12 @@ function goExport(){
 			<table border="0" cellpadding="0" cellspacing="0" class="grid-table">
 				<th colspan="9" style="text-align:left">Reports</th>
 				<tr>
+				<td colspan="9" style="border-bottom:none;"> <div class="success">{if $smarty.request.id eq 1} Email sent successfully {/if}</div> </td>	
+				</tr>
+				<tr>
 				<div class="Error" align="center" id="errmsg"></div>
-				 <td width="10%" nowrap="nowrap">Select Month & Year:</td>
-				 <td width="18%" style="text-align:left;">
+				 <td width="10%" nowrap="nowrap" style="border-bottom:none;">Select Month & Year:</td>
+				 <td width="16%" style="text-align:left;border-bottom:none;">
 					<select id="month" name="month" onchange="return chkResource();">
 					{foreach key=k item=v from=$months}	
 					<option value='{$k}' {if $k eq $currentMonth}selected{/if}>{$v} </option>
@@ -269,8 +279,8 @@ function goExport(){
  					{/foreach}
 					</select>
 				 </td>
-				<td width="5%" nowrap="nowrap" style="text-align:left;">Department: <span style="color:red">*</span></td>
-				<td style="text-align:left;" width="5%"> 
+				<td width="5%" nowrap="nowrap" style="text-align:left;border-bottom:none;">Department: <span style="color:red">*</span></td>
+				<td style="text-align:left;border-bottom:none;" width="5%"> 
 				<select id="department" name="department" style="width: 160px;" onchange="getresdep(this.value); tbl_report();">
 					<option value="">--Select--</option>
 					{foreach item=dept from=$depdata}
@@ -281,17 +291,21 @@ function goExport(){
 					</p>
 					{/foreach}	
 				</select>
+				<input type="hidden" name="deptname" id="deptname" value=" ">
+				<input type="hidden" name="optionname" id="optionname" value=" ">
+
+				
 				</td>
 				<input type="hidden" name="dataction" id="dataction">
 				<input type="hidden" name="numrec" id="numrec">
 				<input type="hidden" name="singlerestemp" id="singlerestemp">
-				<td width="5%" nowrap="nowrap" style="text-align:left;">Resource:</td>
-				<td width="5%">
-				<input type ="radio" id="radio2" name = "radio" onclick="return tbl_report();"> 
+				<td width="5%" nowrap="nowrap" style="text-align:left;border-bottom:none;">Resource:</td>
+				<td width="5%"  style="text-align:left;border-bottom:none;">
+				<input type ="radio" id="radio2" name = "radio" onclick="return tbl_report();" value="all"> 
 	               		<span style="text-align:left" width="6%"valign="top">All</span>
 	            		</td>
-              			<td width="18%" style="text-align:left">
-				<input type ="radio" id="radio1" name = "radio"  onclick="return tbl_view();"> 
+              			<td width="18%" style="text-align:left;border-bottom:none;">
+				<input type ="radio" id="radio1" name = "radio"  onclick="return tbl_view();" value="sing"> 
 	             		<span style="text-align:left;" width="10%" valign="top" nowrap="nowrap" >Individual</span>
 	          		<select id="newresid" name="newresid" style="width: 96px;" onchange="return tbl_view();">
 						<option value="">--Resource--</option>
@@ -307,18 +321,18 @@ function goExport(){
 				 <button id="exportBtn" download="Report.xls" class="btn btn-lg btn-warning custom-btn-01 hover_effect pull-right pull-right-to-left">Export to CSV</button>
 				</td> -->
 				
-				<td style="text-align:left; display:none;" id="sendmail" name="sendmail">
-				<a  class="button" id="top"  onclick="sendMail();" href="#"><img src="img/mail_send.png" align="middle" height="30" width="30">Send mail</a>
+				<td style="text-align:left; display:none;border-bottom:none;" id="sendmail" name="sendmail">
+				<a  class="button" id="top"  href="javascript:void(0);" onclick="goExport();"><img src="img/mail_send.png" align="middle" height="30" width="30">Send mail</a>
 				</td>
 				
-				<td style="text-align:right;" >
-				<a style="float:right;" href="#" onclick="goExport();">Export</a>
-				<input type="hidden" name="resourceq" id="resourceq" value=" ">
+				<td style="text-align:right;border-bottom:none;" >
+				<input type="hidden" name="resourceinital" id="resourceinital" value=" ">
 <a class="button" id="top" href="#" onclick="tool(this); return ExcellentExport.excel(this,'exporttable'); "><img src="img/CSV.png" align="middle" height="30" width="30">Export to CSV</a>
 				</td>
 	         		</tr>
-	         		</tr>
-	         		</tr>
+	         		<tr>
+				<td style="border-bottom:none;">&nbsp;</td>
+				</tr>
 	         	</table>
 		</form>
 	      </div>	  

@@ -41,7 +41,10 @@
 	$config['DBName']	= "rajasri_drs";
 	
 	
-
+    $config['Email_Host']= "smtp.gmail.com";
+	$config['Email_Port']="465";
+	$config['Email_Username']="businessdev@rajasri.net";
+	$config['Email_Password']="18rajasri";
 /*	Page Navigation Settings	*/
 
 ##############################

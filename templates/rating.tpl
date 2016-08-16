@@ -111,7 +111,7 @@ function getresdep(val){
 	function myFunction() 
 	{
 		var x;
-		if (confirm("Are you sure you want to deletethis record?") ) 
+		if (confirm("Are you sure you want to delete this record?") ) 
 		{
 			return true;
 		}
@@ -245,7 +245,7 @@ function getresdep(val){
 					
 					<td style="text-align:right;border-bottom:none;" width="9%"valign="top">Department: <span style="color:red;">*</span>  </td>
 					<td style="text-align:left;border-bottom:none;" id="deptshow" width="5%"valign="top">
-					<select id="department" name="department" style="width:130px;" onchange="getresdep(this.value);">
+					<select id="department" name="department" style="width:100px;" onchange="getresdep(this.value);">
 						<option value="">--Select--</option>
 							{foreach item=department from=$dept}
 								<option value='{$department.Id}' {if $getRating.0.DepartmentId eq $department.Id} selected="selected" {/if}>{$department.DepartmentName}</option>

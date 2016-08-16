@@ -8,17 +8,7 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="js/excellentexport.js"></script>
 <script>
-function sendMail() 
-{
-	var service_id = 'my_mandrill';
-	var template_id = 'feedback';
-	var template_params = {
-		name: 'John',
-		reply_email: 'monicap@rajasri.net',
-		message: 'This is awesome!'
-	};
-	emailjs.send(service_id,template_id,template_params);
-}
+
 function getresdep(val){
 	$.ajax({
 		url: 'getdept.php',
@@ -33,18 +23,52 @@ function getresdep(val){
 		}
 	});
 }
-function tbl_view()
+function alldepartval()
+{
+	if(document.getElementById('department').value =="")
 	{
-		if(document.getElementById('department').value =="")
+		alert('Please select department');
+		document.getElementById('department').focus();
+		document.getElementById('radio2').checked = false;
+		return false;
+	}
+	else
+	{	
+		tbl_report();
+	}
+}
+function checkdepval()
+{
+	
+}
+function departval()
+{
+	if(document.getElementById('department').value =="")
 		{
 		alert('Please select department');
 		document.getElementById('department').focus();
+		document.getElementById('radio1').checked = false;
 		return false;
 		}
-		if(document.getElementById('newresid').value=='')
+	if(document.getElementById('newresid').value=='')
 		{
 			alert('Please select initial');
 			document.getElementById('newresid').focus();
+			document.getElementById('radio1').checked = false;
+			return false;
+		}	
+		else
+		{
+		tbl_view();
+		return true;
+		}
+	
+}
+function tbl_view()
+	{
+		// Individual resource 
+		if(document.getElementById("radio2").checked==false && document.getElementById("radio1").checked==false )
+		{
 			return false;
 		}
 		else
@@ -70,16 +94,15 @@ function tbl_view()
 			    	    
 			 });
 		$( "#radio1" ).prop( "checked", true ); /*individual*/
-    		document.getElementById("sendmail").style.display = "none";
+    		document.getElementById("sendmail").style.display = "block";
 		}
 	}
 function tbl_report()
 	{
-		if(document.getElementById('department').value =="")
+		// All resource 
+		if(document.getElementById("radio2").checked==false && document.getElementById("radio1").checked==false)
 		{
-		alert('Please select department');
-		document.getElementById('department').focus();
-		return false;
+			return false;	
 		}
 		else
 		{
@@ -106,16 +129,20 @@ function tbl_report()
 			 });
 		$( "#radio2" ).prop( "checked", true );	
 		}
-		
 	}	
 
-function chkResource(){
-	if(document.getElementById("radio2").checked==true){
-		tbl_report();
-	}else{
-		tbl_view();
-	}
+function chkResource()
+{
+		if(document.getElementById("radio2").checked==true)
+		{
+			tbl_report();
+		}
+		else
+		{
+			tbl_view();
+		}
 }
+
 function sortsub1()
 	{
 	if((document.getElementById('sortflag').value!="1")&&(document.getElementById('sortflag').value!="2"))
@@ -141,12 +168,15 @@ function tool(link)
 	var op = mnth.options[mnth.selectedIndex];
 	//alert(op.text);
 	var month=op.text;
-	var dpt=document.getElementById('department'); 
+	var dpt=document.getElementById('department');
+	var department=document.getElementById('department').value;	 
 	var dp = dpt.options[dpt.selectedIndex];
 	var deptv=dp.text;
 	var year=document.getElementById('year').value;
 	var newresid=document.getElementById('newresid').value;	
     	link.title = 'after click';
+	if(document.getElementById('month').value != '0' && year != '0' && department !='' )
+	{
     	if($('#radio2').is(':checked'))
 	{
     		link.download = 'Report-All ('+deptv+')-'+month+'-'+year+'.xls';
@@ -157,6 +187,11 @@ function tool(link)
     		var opt = newresid.options[newresid.selectedIndex];
     		var option_value=opt.text;
    		link.download = 'Report-'+option_value+'('+deptv+')-'+month+'-'+year+'.xls';
+	}
+	}
+	else
+	{
+		departval();
 	}
   }
 function goExport(){
@@ -172,77 +207,36 @@ function goExport(){
 	var str = $("form").serialize();
 	window.location="excel.php?"+str;
 }
-/*$(document).ready(function(){
-	tbl_report();
-	$( "#radio" ).prop( "checked", true );
-	if($('#radio').is(':checked'))
-		{
-			alert('a');			
-			document.getElementsById("top")[0].setAttribute("download", "report.xls");
-			 			
-			//download="report.xls" 
-		}
-		else
-		{
-		
-		}*/
 
-/* $("#exportBtn").click(function(e) {
-	var newresid = document.getElementById('newresid');
-	var opt = newresid.options[newresid.selectedIndex];
-	var option_value=opt.text;
-	//alert( opt.value );
-	//alert( opt.text );
- 	var mnth = document.getElementById('month');
-	var op = mnth.options[mnth.selectedIndex];
-	var month=op.text;
-	//var month=document.getElementById('month').value;
-	var year=document.getElementById('year').value;
-	var newresid=document.getElementById('newresid').value;	
-	if($('#radio').is(':checked'))
+function check_all()
+ {
+	var month=document.getElementById('month').value; 
+	var year=document.getElementById('year').value; 	
+	var department=document.getElementById('department').value; 
+	if(month != '0' && year != '0' && department !='' )
 	{
-	//alert('hi');
-	var tab_text="<table> <tr> Daily Rating System Report </tr><tr> <td> Period:</td> <td>"+month+"-"+year+"</td></tr></table><table border='2px'><tr bgcolor='#87AFC6'>";
+		//alert('check_all');
+		$( "#radio2" ).prop( "checked", true );	
+		chkResource();
+	}
+ }
+ function check_single()
+ {
+	var month=document.getElementById('month').value; 
+	var year=document.getElementById('year').value; 
+	var department=document.getElementById('department').value; 
+	var newresid=document.getElementById('newresid').value; 
+	if(month != '0' && year != '0' && department !='' && newresid !='' )
+	{
+		//alert('check_single');
+		$( "#radio1" ).prop( "checked", true );	
+		chkResource();
 	}
 	else
 	{
-	//alert('hello');
-	var avg_rate = document.getElementById('avg_rate').value;
-	var beginpoints = document.getElementById('beginpoints').value;
-	var tab_text="<table> <tr> Daily Rating System Report </tr><tr> <td> Period:</td> <td>"+month+"-"+year+"</td></tr><tr><td> Resource:</td><td>"+option_value+"</td></tr><tr><td>Beginning Rate</td><td>"+beginpoints+"</td><td> End Rate</td><td>"+avg_rate+"</td></table><table border='2px'><tr bgcolor='#87AFC6'>";
-	}	
-	var textRange; var j=0;
-	tab = document.getElementById('exporttable'); // id of table
-	for(j = 0 ; j < tab.rows.length ; j++)
-	{	
-		tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
-		//tab_text=tab_text+"</tr>";
-	}
-	tab_text=tab_text+"</table>";
-	//tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-	//tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-	//tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-	
-	var ua = window.navigator.userAgent;
-	var msie = ua.indexOf("MSIE ");
-	var a = document.createElement('a');
-	a.filename= 'Report.xls';
-	if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
-	{
-	txtArea1.document.open("txt/html","replace");
-	txtArea1.document.write(tab_text);
-	txtArea1.document.close();
-	txtArea1.focus();
-	sa=txtArea1.document.execCommand("SaveAs",true,"Report.xls");
-	}
-	else{ //other browser not tested on IE 11
-	sa = 'data:application/vnd.ms-excel,' + encodeURIComponent(tab_text);
-	newWindow=window.open(sa, 'Report.xls');
-	}
-	return (sa);
-	});
- });*/
-	
+		check_all();	
+	}	 
+ }
 </script>
 {/literal}
 <!--Design Prepared by Rajasri Systems-->   
@@ -281,7 +275,7 @@ function goExport(){
 				 </td>
 				<td width="5%" nowrap="nowrap" style="text-align:left;border-bottom:none;">Department: <span style="color:red">*</span></td>
 				<td style="text-align:left;border-bottom:none;" width="5%"> 
-				<select id="department" name="department" style="width: 160px;" onchange="getresdep(this.value); tbl_report();">
+				<select id="department" name="department" style="width: 160px;"  onchange=" check_single(); return getresdep(this.value);">
 					<option value="">--Select--</option>
 					{foreach item=dept from=$depdata}
 					<p>
@@ -301,17 +295,17 @@ function goExport(){
 				<input type="hidden" name="singlerestemp" id="singlerestemp">
 				<td width="5%" nowrap="nowrap" style="text-align:left;border-bottom:none;">Resource:</td>
 				<td width="5%"  style="text-align:left;border-bottom:none;">
-				<input type ="radio" id="radio2" name = "radio" onclick="return tbl_report();" value="all"> 
+				<input type ="radio" id="radio2" name = "radio" onclick="alldepartval(); check_all();" value="all"> 
 	               		<span style="text-align:left" width="6%"valign="top">All</span>
 	            		</td>
               			<td width="18%" style="text-align:left;border-bottom:none;">
-				<input type ="radio" id="radio1" name = "radio"  onclick="return tbl_view();" value="sing"> 
+				<input type ="radio" id="radio1" name = "radio"  onclick="departval();check_single();" value="sing"> 
 	             		<span style="text-align:left;" width="10%" valign="top" nowrap="nowrap" >Individual</span>
-	          		<select id="newresid" name="newresid" style="width: 96px;" onchange="return tbl_view();">
+	          		<select id="newresid" name="newresid" style="width: 96px;" onchange="check_single(); return tbl_view(); ">
 						<option value="">--Resource--</option>
-						{foreach item=resource from=$tabresdata}
+						<!--  {foreach item=resource from=$tabresdata}
 						<option value='{$resource.ID}'>{$resource.ResourceInitial}</option>
-						{/foreach}	
+						{/foreach}	-->
 				</select>   
 	           		</td>
                			<!--<td style="text-align:right;"> 

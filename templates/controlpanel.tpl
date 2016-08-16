@@ -8,7 +8,7 @@
   <div id="center-column">
     <div class="top-bar-header">
       <h1>Control Panel</h1>
-      <div class="breadcrumbs">Home</div>
+      <div class="breadcrumbs"><!-- Home --></div>
     </div>
     <br />
     <div class="dashboard-table">

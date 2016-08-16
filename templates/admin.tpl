@@ -14,6 +14,14 @@ function validate_ad()
 		document.getElementById('ad_fname').focus();
 		return false;
 	}
+
+	// if(document.getElementById('ad_des').value == "")
+	//{
+	//	document.getElementById('errmsg1').innerHTML = 'Please enter designation';
+	//	document.getElementById('ad_des').focus();
+	//	return false;
+	//}  
+	
 	if(document.getElementById('ad_txt').value == "")
 	{
 		
@@ -152,7 +160,7 @@ function sortsub3()
 				<td width="5%" style="border-bottom:none;"><input type ="text"  style="width: 130px;" id="ad_fname" name = "admin_fname" value="{$adminDetails.0.Name}"></td>
 				
 				<td style="text-align: right;border-bottom:none; width: 4%;" nowrap="nowrap">Designation:</td>
-				<td width="5%" style="border-bottom:none;"><input type ="text"  style="width: 180px;" id="ad_fname" name = "admin_des" value="{$adminDetails.0.Designation}"></td>
+				<td width="5%" style="border-bottom:none;"><input type ="text"  style="width: 180px;" id="ad_des" name = "admin_des" value="{$adminDetails.0.Designation}"></td>
 				
 				<td style="text-align: right;border-bottom:none; width: 4%;" nowrap="nowrap">Username: <span style="color:red">*</span></td>
 				<td width="5%" style="border-bottom:none;"><input type ="text" style="width: 100px;" id="ad_txt" name = "admin_text" value="{$adminDetails.0.Username}"></td>
@@ -166,8 +174,10 @@ function sortsub3()
 			</tr>
 			<tr>
 				<td width="5%" colspan="10" style="border-bottom:none;"><input type ="submit" id="rs_btn" name = "admin_button" value="Submit" onclick="clear_field();"></td>
-	       		 </tr>
-			<tr><td height="0" style=" padding: 0px;" colspan="10">&nbsp;</td></tr>
+	       	</tr>
+			<tr>
+				<td height="0" style=" padding: 0px;" colspan="10">&nbsp;</td>
+			</tr>
 	        </table>
 		</form>
 		<div id = "res_tbl" >	

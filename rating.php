@@ -9,6 +9,7 @@
 	if($_REQUEST['Hitaction']=='1')
 	{
 		$objRating->insertdetails();
+		$objRating->display();
 	}
 	if($_REQUEST['update_rating']=='1')
 	{

@@ -192,24 +192,23 @@ class Report extends MysqlFns
 		//$selectedid = $_REQUEST['newresid'];
 		$iselect="select Email from resource where ID='".$id."'";
 		$idresource = $this->ExecuteQuery($iselect,"select");
-		$to_email = $idresource[0]['Email'];
+		$to_email = $idresource[0]['Email']; // send email id 
 		$filepath =  $_SERVER['DOCUMENT_ROOT']."/rajasri_DRS/$nid"; 
 		$mailmonth = $_REQUEST['month'];
-		$monthName = date("F", mktime(0, 0, 0, $getmon, 10));
+		$monthName = date("F", mktime(0, 0, 0, $mailmonth, 10));
 		$mailyear = $_REQUEST['year'];
 		$iniquery=$_REQUEST['optionname'];
 		$mail_sendlink=$this->sendmail($monthName,$mailyear,$to_email,$filepath,$iniquery);
 	}
-	function sendmail($mailmon,$mailyr,$to_email,$file,$iniquery)
+	function sendmail($monthName,$mailyr,$to_email,$file,$iniquery)
     	{
 		if($to_email!="")
            	 {
                 $Recipiant = $to_email;
-               // $subject = "Daily status report for a Period : ".$mailmon."-".$mailyr.".";
-                $subject="Rajasri Daily Status Report";
+                $subject="Daily Ratings for the month of ".$monthName."-".$mailyr."";
                 $Sender="hr@rajasri.net";
                 $host= $config['Email_Host'];                               // sets GMAIL as the SMTP server
-                $port=$config['Email_Port'];                                                   // set the SMTP port for the GMAIL server
+                $port=$config['Email_Port'];                             // set the SMTP port for the GMAIL server
                 $username=$config['Email_Username'];                   // GMAIL username
                 $pwd=$config['Email_Password'];
 
@@ -232,13 +231,18 @@ class Report extends MysqlFns
 		{
                    $mail->AddAttachment($file); // attach files
                 }
-		$mail->Body       = "Hai ".$iniquery." Please find the attachment for your daily status report for a Period : ".$mailmon."-".$mailyr.".";
+		$mail->Body = $iniquery.",\n\nPlease find your ratings for the month ".$monthName."-".$mailyr." in the attached file.";
                 $mail->AddAddress("$Recipiant","");
                 if($mail->Send()) 
-		{return true;}else{return false;}
+		{
+			header('Location: report.php?id=1');
+		}
+		else
+		{
+			return false;
+		}
                 $mail->ClearAddresses();
            	 }
-	header("location:report.php?id= 1");	
 	}
 }
 ?>

@@ -39,6 +39,8 @@ class Rating extends MysqlFns
 	{
 		global $objSmarty,$config;
 		$orderBy='';
+		$CURDATE =date('Y-m-d');
+		$INTERVAL=date('Y-m-d', strtotime($CURDATE . ' -30 days'));
 		if(isset($_REQUEST['sortflag']) && $_REQUEST['sortflag']!='')
 		{
 			if($_REQUEST['sortflag']=='1')
@@ -78,7 +80,7 @@ class Rating extends MysqlFns
 		{
 			$orderBy.="order by RatingDate asc";
 		}
-		$tempdisvar= "SELECT * FROM rating r,resource re,code c,admin a WHERE r.ResourceID=re.ID AND r.CodeID=c.ID  and a.ID=r.CreatedBy AND (r.RatingDate BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()) $orderBy";
+		$tempdisvar= "SELECT * FROM rating r,resource re,code c,admin a WHERE r.ResourceID=re.ID and r.CodeID=c.ID  and a.ID=r.CreatedBy and (r.RatingDate BETWEEN '$INTERVAL' AND '$CURDATE') $orderBy"; 
 		$displaydet= $this->ExecuteQuery($tempdisvar, "select");
 		$objSmarty->assign('displaydet', $displaydet);
 	}
